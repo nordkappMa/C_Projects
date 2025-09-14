@@ -1,0 +1,12 @@
+
+野指针：
+int* fun()
+{
+	int a = 10;
+	return &a; //a只是一个局部变量。当返回后，内容已经消失，但是地址在还在，返回main函数后 p 再次指向该地址已经没有意义了。 这时main函数中的p 就是野指针。
+}
+int main(int argc, char* argv[])
+{
+	int *p = fun();
+	return 0;
+}
