@@ -1,0 +1,127 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node
+{
+	int data;
+	struct Node* next;
+}Node;
+
+//创建链表-->用第一个节点表示整个链表
+Node* createList()
+{
+	Node* head = (Node*)malloc(sizeof(Node));
+	if (NULL == head)
+	{
+		printf("malloc failed!!!\n");
+		return NULL;
+	}
+	//第一个节点（表头）不存储数据
+	head->next = NULL;
+	return head;
+}
+//创建新节点
+Node* createNode(int data)
+{
+	Node* node = (Node*)malloc(sizeof(Node));
+	if (NULL == node)
+	{
+		printf("malloc failed!!!\n");
+		return NULL;
+	}
+	memset(node, 0, sizeof(Node));
+	node->data = data;
+	node->next = NULL;
+	return node;
+}
+//表头插入
+void headInsert(Node* head, int data)
+{
+	Node* newNode = createNode(data);
+	newNode->next = head->next;
+	head->next = newNode;
+}
+//打印
+void printList(Node* head)
+{
+	Node* temp = head->next; //
+	while (temp != NULL)
+	{
+		printf("%d ",temp->data);
+		temp = temp->next;
+	}
+	printf("\n");
+}
+
+//查找，返回找到的节点
+Node* searchInfo(Node* head, int data)
+{
+	Node* pMove = head->next;
+	if (NULL != pMove && pMove->data != data)
+	{
+		pMove = pMove->next;
+	}
+	return pMove;
+}
+//指定位置删除
+void deleteByPosition(Node* head, int data)
+{
+	Node* frontNode = head;
+	Node* postNode = head->next;
+	while (postNode != NULL && postNode->data != data)
+	{
+		frontNode = postNode;
+		postNode = postNode->next;
+	}
+	if (postNode == NULL)
+	{
+		return;
+	}
+	frontNode->next = postNode->next;
+	free(postNode);
+	postNode = NULL;
+}
+
+//尾插
+void tailInsert(Node* head, int data)
+{
+	Node* newNode = createNode(data);
+	Node* temp = head;
+	while (temp->next != NULL)
+	{
+		temp = temp->next;
+	}
+	temp->next = newNode;
+}
+
+//销毁整个链表
+void destroyList(Node* head)
+{
+	Node* temp = NULL;
+	while (head)
+	{
+		temp = head;
+		head = head->next;
+		free(temp);
+	}
+
+}
+
+int main(int argc, char* argv[])
+{
+	//头指针
+	Node* head = createList();
+	headInsert(head, 1);
+	headInsert(head, 2);
+	headInsert(head, 3);
+	headInsert(head, 4);
+	headInsert(head, 5);
+	headInsert(head, 6);
+	printList(head);
+	tailInsert(head, 7);
+	//deleteByPosition(head, 2);
+	printList(head);
+	destroyList(head);
+	printList(head);
+	return 0;
+}
